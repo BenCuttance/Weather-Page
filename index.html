@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,25 +8,41 @@
     <title>Weather By Ben</title>
     <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
-<header>
-    <h1>Welcome to <i>Weather by Ben</i> </h1>
-</header>
-    <div>
+    <header>
 
-    </div>
+        <!-- <img src="./Images/banner2.jpg" alt="Cloudy sky, light blue"> -->
+        <h1>Welcome to <br> <i> Weather by Ben</i> </h1>
+    </header>
+    <main>
+        <div class="container">
+            <nav class="nav search">
+                <form id="search-form" class="card-body">
+                    <h3>City Name</h3>
+                    <label class="form-label" for="search"></label>
+                    <input name="search" id="search" type="text" autofocus="true" class="form-input" />
+                    <br>
+                    <button type="submit" class="btn">Search</button>
+                </form>
+            </nav>
+            <section class="main">
+                <div class="col top">Current forecast for the day
 
-    <div>
-        <div>
+                </div>
+                <div class="col middle">Five day forecast
+
+                </div>
+
+            </section>
 
         </div>
-        <div>
 
-        </div>
-    </div>
 
-    
-  <script src="./script.js"></script>  
+
+
+    </main>
+    <script src="./script.js"></script>
 </body>
 
 </html>
