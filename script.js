@@ -27,6 +27,7 @@ var submitHandler = function (event) {
 
 var getCityWeather = function (cityName) {
     var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=5&appid=56315fabf30e0df518942accfd04300c'
+    
 
 
     fetch(apiUrl)
@@ -37,6 +38,7 @@ var getCityWeather = function (cityName) {
                     console.log("locations hopefully")
                     console.log(data)
                     displayCity(data, cityName);
+                    
                 })
             } else { 
                 alert ('Error' + response.statusText)
@@ -44,7 +46,10 @@ var getCityWeather = function (cityName) {
         })
 }
 
+
 var displayCity = function (cities, searchTerm) {
+    
+
     if (cities.length === 0){
 cityContainerEl.textContent = 'No cities found'
 return;
@@ -52,9 +57,18 @@ return;
 
 
 for (var i = 0; i < cities.length; i++){
+    var cityLat = cities[i].lat
+    var cityLong = cities[i].lon
+    console.log(cityLat)
+    console.log(cityLong)
+
+
+    
+    
+    
     var citiesName = cities[i].name + "  (" + cities[i].country +", " + cities[i].state + ")"
     console.log(citiesName);
-    // alert(citiesName)
+    
     var cityEl = document.createElement('button');
     cityEl.classList = 'list-item flex-row justify-space-between align-center';
 
@@ -69,8 +83,31 @@ for (var i = 0; i < cities.length; i++){
     cityContainerEl.appendChild(cityEl)
 
     
-    
 }
 }
 
+
 searchBtn.addEventListener('click', submitHandler)
+
+
+// var collectWeather = function(cityLat, cityLong) {
+    
+//     var weatherUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + cityLat + '&lon='+ cityLong +'&appid=56315fabf30e0df518942accfd04300c'
+   
+//     var cityLat = cities[i].lat
+//        var cityLong = cities[i].lon
+//        console.log(cityLat)
+//        console.log(cityLong)
+   
+//    fetch(weatherUrl)
+//        .then(function (response){
+//            if (response.ok)
+//            console.log(response);
+//            response.json().then(function(data){
+//                console.log("display city weather?")
+//                console.log(data)
+//            })
+//        })
+       
+       
+//    }
