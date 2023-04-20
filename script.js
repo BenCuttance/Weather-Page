@@ -50,14 +50,26 @@ cityContainerEl.textContent = 'No cities found'
 return;
     }
 
-cityContainerEl.textContent = searchTerm;
 
 for (var i = 0; i < cities.length; i++){
     var citiesName = cities[i].name + "  (" + cities[i].country +", " + cities[i].state + ")"
-
     console.log(citiesName);
     // alert(citiesName)
+    var cityEl = document.createElement('button');
+    cityEl.classList = 'list-item flex-row justify-space-between align-center';
 
+    var titleEl = document.createElement('span')
+    titleEl.textContent = citiesName;
+
+    cityEl.appendChild(titleEl)
+
+    var statusEl = document.createElement('span')
+    statusEl.classList = 'flex-row align-center';
+
+    cityContainerEl.appendChild(cityEl)
+
+    
+    
 }
 }
 

@@ -75,6 +75,7 @@ i {
     background-color: rgb(28, 145, 192);
     color: white;
     border: 25px;
+    border: 2px solid black;
 
 
 }
@@ -86,6 +87,7 @@ input {
     position: relative;
     left: 95px;
     border-radius: 25px;
+    padding: 5px;
 }
 
 .col {
@@ -111,9 +113,11 @@ input {
 
 #cityContainer {
 
-    border: 2px solid black;
+    /* border: 2px solid black; */
     min-height: 50px;
     border-radius: 25px;
+    display: flex;
+    flex-direction: column;
 }
 
 #citiesSearchTerm {
@@ -122,5 +126,29 @@ input {
     min-height: 5px;
     background-color: yellow;
     border-radius: 25px ;
+
+}
+
+button {
+
+    /* background-color: rgb(28, 145, 192); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    border-radius: 25px;
+    padding: 5px;
+    font-size: 20px;
+}
+
+
+button:hover {
+
+    background-color: rgb(28, 145, 192);
+    color: white;
+    border: 25px;
+    border: 2px solid black;
+    
+
 
 }
