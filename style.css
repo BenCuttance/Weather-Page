@@ -108,3 +108,19 @@ input {
     border-radius: 25px;
     padding: 5px;
 }
+
+#cityContainer {
+
+    border: 2px solid black;
+    min-height: 50px;
+    border-radius: 25px;
+}
+
+#citiesSearchTerm {
+
+    border: 2px solid black;
+    min-height: 5px;
+    background-color: yellow;
+    border-radius: 25px ;
+
+}
