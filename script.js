@@ -66,11 +66,14 @@ function renderCurrentWeather (data) {
 
 function renderFivDayForecast (data){
 
-    var temp = data.main.temp
-    var wind = data.wind.speed
-    var humidity = data.main.humidity
-    var iconUrl = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`
-    console.log('Hello')
+    var city = data.city.name
+    var date = data.list[0].dt_txt
+    console.log(date)
+    var temp = data.list[0].main.temp
+    
+    var humidity = data.list[0].main.humidity
+    var iconUrl = `https://openweathermap.org/img/w/${data.list[0].weather[0].icon}.png`
+    var weather = data.list[0].weather.main
     
 
 
@@ -79,26 +82,29 @@ function renderFivDayForecast (data){
     var heading = document.createElement('h2');
     var weatherIcon = document.createElement('img');
     var tempEl = document.createElement('p');
-    var windEl = document.createElement('p');
+    var weatherEl = document.createElement('p');
     var humidityEl = document.createElement('p');
+    var dateEl = document.createElement('p')
 
     card.setAttribute('class', 'card')
     cardBody.setAttribute('class', 'cardBody')
     card.append(cardBody);
     heading.setAttribute('class', 'cardHeading');
     tempEl.setAttribute('class', 'cardText');
-    windEl.setAttribute('class', 'cardText');
+    dateEl.setAttribute('class', 'cardText' )
+    weatherEl.setAttribute('class', 'cardText');
     humidityEl.setAttribute('class', 'cardText');
     weatherIcon.setAttribute('class', 'weatherIcon');
     weatherIcon.setAttribute('src', iconUrl);
 
-    // heading.textContent = `${data.name} ${date}`
+    heading.textContent = `${city} ${date}` 
     heading.append(weatherIcon);
+    // dateEl.textContent = ${date}
     tempEl.textContent = `Temp: ${temp}C`
-    windEl.textContent = `Wind: ${wind}kmh`
+    weatherEl.textContent = `Sky: ${weather}`
     humidityEl.textContent = `Humidity: ${humidity}%`
 
-    cardBody.append(heading, tempEl, windEl, humidityEl);
+    cardBody.append(heading, tempEl, weatherEl, humidityEl);
     forecastedWeather.innerHTML = ""
     forecastedWeather.append(card);
 
@@ -127,7 +133,7 @@ var getCityWeather = function (cityName) {
                 .then(function(data){
                     console.log(data)
                     renderCurrentWeather(data)
-                    renderFivDayForecast(data)
+                    
                 })
                     fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=56315fabf30e0df518942accfd04300c`)
                     .then(function (response){
@@ -135,6 +141,7 @@ var getCityWeather = function (cityName) {
                     })
                     .then(function(data){
                         console.log(data)
+                        renderFivDayForecast(data)
                     })
                 })
             } else { 
