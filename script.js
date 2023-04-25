@@ -1,7 +1,8 @@
 var searchBtn = document.querySelector(".btn")
 var searchInputEl = document.querySelector('#search')
 var cityContainerEl = document.querySelector('#cityContainer')
-
+var currentWeather = document.querySelector('#currentWeather')
+var cityBtn = document.querySelector('.cityBtn')
 // searchBtn.addEventListener()
 
 // API api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=56315fabf30e0df518942accfd04300c
@@ -25,11 +26,90 @@ var submitHandler = function (event) {
     };
 };
 
+function renderCurrentWeather (data) {
+    var date = dayjs().format('M/D/YYYY')
+    var temp = data.main.temp
+    var wind = data.wind.speed
+    var humidity = data.main.humidity
+    var iconUrl = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`
+   
+    
+    var card = document.createElement('div');
+    var cardBody = document.createElement('div');
+    var heading = document.createElement('h2');
+    var weatherIcon = document.createElement('img');
+    var tempEl = document.createElement('p');
+    var windEl = document.createElement('p');
+    var humidityEl = document.createElement('p');
+
+    card.setAttribute('class', 'card')
+    cardBody.setAttribute('class', 'cardBody')
+    card.append(cardBody);
+    heading.setAttribute('class', 'cardHeading');
+    tempEl.setAttribute('class', 'cardText');
+    windEl.setAttribute('class', 'cardText');
+    humidityEl.setAttribute('class', 'cardText');
+    weatherIcon.setAttribute('class', 'weatherIcon');
+    weatherIcon.setAttribute('src', iconUrl);
+    
+    heading.textContent = `${data.name} ${date}`
+    heading.append(weatherIcon);
+    tempEl.textContent = `Temp: ${temp}C`
+    windEl.textContent = `Wind: ${wind}kmh`
+    humidityEl.textContent = `Humidity: ${humidity}%`
+
+    cardBody.append(heading, tempEl, windEl, humidityEl);
+    currentWeather.innerHTML = ""
+    currentWeather.append(card);
+
+};
+
+function renderFivDayForecast (data){
+
+    var temp = data.main.temp
+    var wind = data.wind.speed
+    var humidity = data.main.humidity
+    var iconUrl = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`
+    console.log('Hello')
+    
+
+
+    var card = document.createElement('div');
+    var cardBody = document.createElement('div');
+    var heading = document.createElement('h2');
+    var weatherIcon = document.createElement('img');
+    var tempEl = document.createElement('p');
+    var windEl = document.createElement('p');
+    var humidityEl = document.createElement('p');
+
+    card.setAttribute('class', 'card')
+    cardBody.setAttribute('class', 'cardBody')
+    card.append(cardBody);
+    heading.setAttribute('class', 'cardHeading');
+    tempEl.setAttribute('class', 'cardText');
+    windEl.setAttribute('class', 'cardText');
+    humidityEl.setAttribute('class', 'cardText');
+    weatherIcon.setAttribute('class', 'weatherIcon');
+    weatherIcon.setAttribute('src', iconUrl);
+
+    // heading.textContent = `${data.name} ${date}`
+    heading.append(weatherIcon);
+    tempEl.textContent = `Temp: ${temp}C`
+    windEl.textContent = `Wind: ${wind}kmh`
+    humidityEl.textContent = `Humidity: ${humidity}%`
+
+    cardBody.append(heading, tempEl, windEl, humidityEl);
+    forecastedWeather.innerHTML = ""
+    forecastedWeather.append(card);
+
+
+}
+
 var getCityWeather = function (cityName) {
     var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=5&appid=56315fabf30e0df518942accfd04300c'
     
 
-
+    // lat: 40.7127281, lon: -74.0060152
     fetch(apiUrl)
         .then(function (response) {
             if (response.ok) {
@@ -37,8 +117,25 @@ var getCityWeather = function (cityName) {
                 response.json().then(function (data) {
                     console.log("locations hopefully")
                     console.log(data)
-                    displayCity(data, cityName);
-                    
+                   var lat = data[0].lat
+                   var lon = data[0].lon
+                   displayCity(data, cityName)
+                   fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=56315fabf30e0df518942accfd04300c`)
+                   .then(function (response){
+                    return response.json()
+                })
+                .then(function(data){
+                    console.log(data)
+                    renderCurrentWeather(data)
+                    renderFivDayForecast(data)
+                })
+                    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=56315fabf30e0df518942accfd04300c`)
+                    .then(function (response){
+                        return response.json()
+                    })
+                    .then(function(data){
+                        console.log(data)
+                    })
                 })
             } else { 
                 alert ('Error' + response.statusText)
@@ -56,21 +153,18 @@ return;
     }
 
 
-for (var i = 0; i < cities.length; i++){
+for (var i = 0; i < 1; i++){
     var cityLat = cities[i].lat
     var cityLong = cities[i].lon
     console.log(cityLat)
     console.log(cityLong)
-
-
-    
-    
     
     var citiesName = cities[i].name + "  (" + cities[i].country +", " + cities[i].state + ")"
     console.log(citiesName);
     
     var cityEl = document.createElement('button');
-    cityEl.classList = 'list-item flex-row justify-space-between align-center';
+    cityEl.classList = 'list-item flex-row justify-space-between align-center cityBtn';
+    
 
     var titleEl = document.createElement('span')
     titleEl.textContent = citiesName;
@@ -82,10 +176,14 @@ for (var i = 0; i < cities.length; i++){
 
     cityContainerEl.appendChild(cityEl)
 
+    localStorage.setItem('cityBtn', cityBtn)
     
 }
 }
 
+// cityBtn.addEventListener('click', function (
+
+// ))
 
 searchBtn.addEventListener('click', submitHandler)
 
