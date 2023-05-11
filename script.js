@@ -153,7 +153,7 @@ function renderFivDayForecast(data) {
 // the 2nd fetch request to collect the current forecast
 
 var getCityWeather = function (cityName) {
-  var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=5&appid=56315fabf30e0df518942accfd04300c'
+  var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=5&appid=56315fabf30e0df518942accfd04300c'
 
 
   // lat: 40.7127281, lon: -74.0060152
