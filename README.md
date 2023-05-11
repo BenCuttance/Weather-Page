@@ -23,7 +23,9 @@ THEN I am again presented with current and future conditions for that city
 ![Home](https://github.com/BenCuttance/Weather-Page/assets/123234427/29b75d76-7fa6-4c53-8941-644c14aa8046)
 ## Search result with current and five day forecase
 (Note: Was able to append more that one day at a time by due date)
+
 [Capture2](https://github.com/BenCuttance/Weather-Page/assets/123234427/bdc370da-b1a0-4823-ad76-e5876be6df0d)
+
 ## Search result with appended buttons!
 ![Capture3](https://github.com/BenCuttance/Weather-Page/assets/123234427/f278b511-8b13-4710-92ec-0669de282860)
 
