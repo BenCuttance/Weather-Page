@@ -2,6 +2,9 @@
 
 ## Description
 
+This webpage has been developed to allow users to search a city and recieve current forecast and a 5 day forecast from the OpenWeather API using a fetch request. After searching for a city users should be able re-load that page and be able to access their previous searches from the local storage.
+(Note: As of the moment the local storage loading feature and the 5 day Forecast is not working as intended)
+
 ## User Story
 AS A traveler
 I WANT to see the weather outlook for multiple cities
