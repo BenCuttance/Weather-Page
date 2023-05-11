@@ -3,118 +3,113 @@ var searchInputEl = document.querySelector('#search')
 var cityContainerEl = document.querySelector('#cityContainer')
 var currentWeather = document.querySelector('#currentWeather')
 var cityBtn = document.querySelector('.cityBtn')
-// searchBtn.addEventListener()
+
 
 // API api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=56315fabf30e0df518942accfd04300c
 
 // {lat} $ {lon} needed for geographical coordinates 
 
 //Geo API to call from first? http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
-// State code only for US
 
-// var requestUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=5&appid=56315fabf30e0df518942accfd04300c'
-
+// Function to load to previous searchs to screen from the array dombuttons. Currently only loads one button...
 dombuttons = []
 
-
-
-
-
 onLoad()
- function onLoad  () {
-    getPastCities()
+function onLoad() {
+  getPastCities()
 }
 
-function getPastCities () {
-   var storageCity = localStorage.getItem('cityName')
-   localStorage.setItem('cities', storageCity)
-  
+function getPastCities() {
+  var storageCity = localStorage.getItem('cityName')
+  localStorage.setItem('cities', storageCity)
 
-  
+  var cityEl = document.createElement('button');
+  cityEl.classList = 'list-item flex-row justify-space-between align-center cityBtn';
 
-    var cityEl = document.createElement('button');
-    cityEl.classList = 'list-item flex-row justify-space-between align-center cityBtn';
+  var titleEl = document.createElement('span')
+  titleEl.textContent = storageCity;
 
-    var titleEl = document.createElement('span')
-    titleEl.textContent = storageCity;
+  cityEl.appendChild(titleEl)
 
-    cityEl.appendChild(titleEl)
-    
 
-    var statusEl = document.createElement('span')
-    statusEl.classList = 'flex-row align-center';
+  var statusEl = document.createElement('span')
+  statusEl.classList = 'flex-row align-center';
 
-    cityContainerEl.appendChild(cityEl)
-   
+  cityContainerEl.appendChild(cityEl)
+
 }
 
 
-
+// Function that collects value from search bar to be used in Fetch request later. Search value is trimmed
 
 var submitHandler = function (event) {
-    event.preventDefault()
+  event.preventDefault()
 
-    var citySearch = searchInputEl.value.trim();
+  var citySearch = searchInputEl.value.trim();
 
-    if (citySearch) {
-        getCityWeather(citySearch);
-    } else {
-        alert('please enter valid city name')
-    };
+  if (citySearch) {
+    getCityWeather(citySearch);
+  } else {
+    alert('please enter valid city name')
+  };
 };
 
-function renderCurrentWeather (data) {
-    var date = dayjs().format('M/D/YYYY')
-    var temp = data.main.temp
-    var wind = data.wind.speed
-    var humidity = data.main.humidity
-    var iconUrl = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`
-   
-    
-    var card = document.createElement('div');
-    var cardBody = document.createElement('div');
-    var heading = document.createElement('h2');
-    var weatherIcon = document.createElement('img');
-    var tempEl = document.createElement('p');
-    var windEl = document.createElement('p');
-    var humidityEl = document.createElement('p');
 
-    card.setAttribute('class', 'card')
-    cardBody.setAttribute('class', 'cardBody')
-    card.append(cardBody);
-    heading.setAttribute('class', 'cardHeading');
-    tempEl.setAttribute('class', 'cardText');
-    windEl.setAttribute('class', 'cardText');
-    humidityEl.setAttribute('class', 'cardText');
-    weatherIcon.setAttribute('class', 'weatherIcon');
-    weatherIcon.setAttribute('src', iconUrl);
-    
-    heading.textContent = `${data.name} ${date}`
-    heading.append(weatherIcon);
-    tempEl.textContent = `Temp: ${temp}C`
-    windEl.textContent = `Wind: ${wind}kmh`
-    humidityEl.textContent = `Humidity: ${humidity}%`
+// Function that renders weather data on screen for the current day by appending fetch data to Div.
 
-    cardBody.append(heading, tempEl, windEl, humidityEl);
-    currentWeather.innerHTML = ""
-    currentWeather.append(card);
+function renderCurrentWeather(data) {
+  var date = dayjs().format('M/D/YYYY')
+  var temp = data.main.temp
+  var wind = data.wind.speed
+  var humidity = data.main.humidity
+  var iconUrl = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`
 
-    localStorage.setItem('cityName', heading.textContent);
+
+  var card = document.createElement('div');
+  var cardBody = document.createElement('div');
+  var heading = document.createElement('h2');
+  var weatherIcon = document.createElement('img');
+  var tempEl = document.createElement('p');
+  var windEl = document.createElement('p');
+  var humidityEl = document.createElement('p');
+
+  card.setAttribute('class', 'card')
+  cardBody.setAttribute('class', 'cardBody')
+  card.append(cardBody);
+  heading.setAttribute('class', 'cardHeading');
+  tempEl.setAttribute('class', 'cardText');
+  windEl.setAttribute('class', 'cardText');
+  humidityEl.setAttribute('class', 'cardText');
+  weatherIcon.setAttribute('class', 'weatherIcon');
+  weatherIcon.setAttribute('src', iconUrl);
+
+  heading.textContent = `${data.name} ${date}`
+  heading.append(weatherIcon);
+  tempEl.textContent = `Temp: ${temp}C`
+  windEl.textContent = `Wind: ${wind}kmh`
+  humidityEl.textContent = `Humidity: ${humidity}%`
+
+  cardBody.append(heading, tempEl, windEl, humidityEl);
+  currentWeather.innerHTML = ""
+  currentWeather.append(card);
+
+  localStorage.setItem('cityName', heading.textContent);
 
 };
 
-function renderFivDayForecast (data){
 
-    var city = data.city.name
-    var date = data.list[0].dt_txt
-    
-    var temp = data.list[0].main.temp
-    
-    var humidity = data.list[0].main.humidity
-    var iconUrl = `https://openweathermap.org/img/w/${data.list[0].weather[0].icon}.png`
-    var weather = data.list[0].weather[0].main
-    
-    for (let i = 0; i < 5; i ++){
+function renderFivDayForecast(data) {
+
+  var city = data.city.name
+  var date = data.list[8].dt_txt
+
+  var temp = data.list[8].main.temp
+
+  var humidity = data.list[8].main.humidity
+  var iconUrl = `https://openweathermap.org/img/w/${data.list[8].weather[0].icon}.png`
+  var weather = data.list[8].weather[0].main
+
+  for (let i = 0; i < 5; i++) {
 
     var card = document.createElement('div');
     var cardBody = document.createElement('div');
@@ -130,13 +125,13 @@ function renderFivDayForecast (data){
     card.append(cardBody);
     heading.setAttribute('class', 'cardHeading');
     tempEl.setAttribute('class', 'cardText');
-    dateEl.setAttribute('class', 'cardText' )
+    dateEl.setAttribute('class', 'cardText')
     weatherEl.setAttribute('class', 'cardText');
     humidityEl.setAttribute('class', 'cardText');
     weatherIcon.setAttribute('class', 'weatherIcon');
     weatherIcon.setAttribute('src', iconUrl);
 
-    heading.textContent = `${city} ${date}` 
+    heading.textContent = `${city} ${date}`
     heading.append(weatherIcon);
     // dateEl.textContent = ${date}
     tempEl.textContent = `Temp: ${temp}C`
@@ -146,120 +141,95 @@ function renderFivDayForecast (data){
     cardBody.append(heading, tempEl, weatherEl, humidityEl);
     forecastedWeather.innerHTML = ""
     forecastedWeather.append(card);
-    
 
-    }
+
+  }
 }
 
 var getCityWeather = function (cityName) {
-    var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=5&appid=56315fabf30e0df518942accfd04300c'
-    
+  var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=5&appid=56315fabf30e0df518942accfd04300c'
 
-    // lat: 40.7127281, lon: -74.0060152
-    fetch(apiUrl)
-        .then(function (response) {
-            if (response.ok) {
-                console.log(response);
-                response.json().then(function (data) {
-                    console.log(data)
-                   var lat = data[0].lat
-                   var lon = data[0].lon
-                   displayCity(data, cityName)
-                   fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=56315fabf30e0df518942accfd04300c`)
-                   .then(function (response){
-                    console.log(data)
-                    return response.json()
-                    
-                })
-                .then(function(data){
-                   let users = localStorage.setItem("search-history", data.name)
-                    
-                    dombuttons.push(data.name)
-                    
-                    renderCurrentWeather(data)
-                    let showCities = (users) => {
-                        dombuttons.forEach(user => {       
-                      console.log(user)
-                          localStorage.setItem('user', JSON.stringify(user));  
-                      
-                        });
-                      };
-                      
-                    
-                        let cities = localStorage.getItem('citySearch', data.name)
-                        var cityEl = document.createElement('button');
-                        cityEl.classList = 'list-item flex-row justify-space-between align-center cityBtn';
-                    
-                        var titleEl = document.createElement('span')
-                        titleEl.textContent = data.name;
-                    
-                        cityEl.appendChild(titleEl)
-                        
-                    
-                        var statusEl = document.createElement('span')
-                        statusEl.classList = 'flex-row align-center';
-                    
-                        cityContainerEl.appendChild(cityEl)
-                       
-                        showCities
-                    
-                    
-                })
-                    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=56315fabf30e0df518942accfd04300c`)
-                    .then(function (response){
-                        return response.json()
-                    })
-                    .then(function(data){
-                        console.log(data)
-                        renderFivDayForecast(data)
-                        
-                    })
-                })
-            } else { 
-                alert ('Error' + response.statusText)
-            }
+
+  // lat: 40.7127281, lon: -74.0060152
+  fetch(apiUrl)
+    .then(function (response) {
+      if (response.ok) {
+        console.log(response);
+        response.json().then(function (data) {
+          console.log(data)
+          var lat = data[0].lat
+          var lon = data[0].lon
+          displayCity(data, cityName)
+          fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=56315fabf30e0df518942accfd04300c`)
+            .then(function (response) {
+              console.log(data)
+              return response.json()
+
+            })
+            .then(function (data) {
+              let users = localStorage.setItem("search-history", data.name)
+
+              dombuttons.push(data.name)
+
+              renderCurrentWeather(data)
+              let showCities = (users) => {
+                dombuttons.forEach(user => {
+                  console.log(data.name)
+                  localStorage.setItem('user', JSON.stringify(user));
+
+                });
+              };
+
+
+              let cities = localStorage.getItem('citySearch', data.name)
+              var cityEl = document.createElement('button');
+              cityEl.classList = 'list-item flex-row justify-space-between align-center cityBtn';
+
+              var titleEl = document.createElement('span')
+              titleEl.textContent = data.name;
+
+              cityEl.appendChild(titleEl)
+
+
+              var statusEl = document.createElement('span')
+              statusEl.classList = 'flex-row align-center';
+
+              cityContainerEl.appendChild(cityEl)
+
+              showCities
+
+
+            })
+          fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=56315fabf30e0df518942accfd04300c`)
+            .then(function (response) {
+              return response.json()
+            })
+            .then(function (data) {
+              console.log(data)
+              renderFivDayForecast(data)
+
+            })
         })
+      } else {
+        alert('Error' + response.statusText)
+      }
+    })
 }
 
 
 var displayCity = function (cities, searchTerm) {
-    
-
-    if (cities.length === 0){
-cityContainerEl.textContent = 'No cities found'
-return;
-    }
 
 
-// for (var i = 0; i < 1; i++){
-//     var cityLat = cities[i].lat
-//     var cityLong = cities[i].lon
-//     console.log(cityLat)
-//     console.log(cityLong)
-    
-//     var citiesName = cities[i].name + "  (" + cities[i].country +", " + cities[i].state + ")"
-    
-    
-//     var cityEl = document.createElement('button');
-//     cityEl.classList = 'list-item flex-row justify-space-between align-center cityBtn';
-    
+  if (cities.length === 0) {
+    cityContainerEl.textContent = 'No cities found'
+    return;
+  }
 
-//     var titleEl = document.createElement('span')
-//     titleEl.textContent = citiesName;
 
-//     cityEl.appendChild(titleEl)
-    
 
-//     var statusEl = document.createElement('span')
-//     statusEl.classList = 'flex-row align-center';
 
-//     cityContainerEl.appendChild(cityEl)
 
-//     localStorage.setItem('cityBtn', cityEl)
-  
-    
-
-// }
+  // 
 }
 
 // cityBtn.addEventListener('click', function (
@@ -268,23 +238,84 @@ return;
 
 searchBtn.addEventListener('click', submitHandler)
 
-function saveSearch(cityName) {
-    const limit = 5;
-    const savedSearch = JSON.parse(localStorage.getItem("search-history")) || [];
-  
-    // [london,sydney,melbourne] -> filteredArray = [london, melbourne]
-    // [sydney, ...filteredArray]
-    if (savedSearch.includes(cityName)) {
-      const newSearchHistory = [
-        cityName,
-        ...savedSearch.filter((location) => location !== cityName),
-      ].slice(0, limit);
-      localStorage.setItem("search-history", JSON.stringify(newSearchHistory));
-    } else {
-      const newSearchHistory = [cityName, ...savedSearch].slice(0, limit);
-      localStorage.setItem("search-history", JSON.stringify(newSearchHistory));
-    }
-  }
-  
 
-  
+function saveSearch(place) {
+  const limit = 5;
+  const savedSearch = JSON.parse(localStorage.getItem("search-history")) || [];
+
+  if (savedSearch.includes(place)) {
+    const newSearchHistory = [
+      place,
+      ...savedSearch.filter((location) => location !== place),
+    ].slice(0, limit);
+    localStorage.setItem("search-history", JSON.stringify(newSearchHistory));
+  } else {
+    const newSearchHistory = [place, ...savedSearch].slice(0, limit);
+    localStorage.setItem("search-history", JSON.stringify(newSearchHistory));
+  }
+}
+
+// Get the images from pexels
+const exploreDestination = (place) => {
+  searchPhotos(place);
+};
+
+const generateHistory = () => {
+  const savedSearch = JSON.parse(localStorage.getItem("search-history")) || [];
+  const container = document.getElementById("history-buttons-container");
+  container.innerHTML = "";
+
+  savedSearch.forEach((place) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.innerHTML = place;
+    btn.onclick = () => {
+      $("#search-input").val(place);
+      getPredictionsAndDisplayOnMap(place);
+      saveSearch(place);
+      exploreDestination(place);
+      generateHistory();
+    };
+    btn.classList.add(
+      "font-semibold",
+      "p-3",
+      "pl-5",
+      "pr-5",
+      "mr-5",
+      "mb-3",
+      "rounded-lg",
+      "shadow-lg"
+    );
+    container.appendChild(btn);
+  });
+};
+
+
+generateHistory();
+
+
+document.getElementById("search-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const newSearch = $("#search-input").val();
+
+  if (!newSearch) return;
+
+  saveSearch(newSearch);
+  generateHistory();
+  exploreDestination(newSearch);
+});
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function () {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+} 
