@@ -97,7 +97,7 @@ function renderCurrentWeather(data) {
 
 };
 
-
+//Function to load the next 5 day forecast from the OpenWeathers API and append the selected data to the div
 function renderFivDayForecast(data) {
 
   var city = data.city.name
@@ -109,6 +109,8 @@ function renderFivDayForecast(data) {
   var iconUrl = `https://openweathermap.org/img/w/${data.list[8].weather[0].icon}.png`
   var weather = data.list[8].weather[0].main
 
+  //Note: Not currently working as intended. The loop has not been implemented correctly. The idea was to collect the data from every 8th array 
+  //and append that data using the for loop with a 8 % 0 type equation
   for (let i = 0; i < 5; i++) {
 
     var card = document.createElement('div');
@@ -145,6 +147,10 @@ function renderFivDayForecast(data) {
 
   }
 }
+ 
+
+// Function that use search to fetch data from the OpenWeather Api. The first fetch grabs the lat and lon from the location and uses those to make
+// the 2nd fetch request to collect the current forecast
 
 var getCityWeather = function (cityName) {
   var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=5&appid=56315fabf30e0df518942accfd04300c'
@@ -229,12 +235,10 @@ var displayCity = function (cities, searchTerm) {
 
 
 
-  // 
+
 }
 
 // cityBtn.addEventListener('click', function (
-
-// ))
 
 searchBtn.addEventListener('click', submitHandler)
 
@@ -255,67 +259,3 @@ function saveSearch(place) {
   }
 }
 
-// Get the images from pexels
-const exploreDestination = (place) => {
-  searchPhotos(place);
-};
-
-const generateHistory = () => {
-  const savedSearch = JSON.parse(localStorage.getItem("search-history")) || [];
-  const container = document.getElementById("history-buttons-container");
-  container.innerHTML = "";
-
-  savedSearch.forEach((place) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.innerHTML = place;
-    btn.onclick = () => {
-      $("#search-input").val(place);
-      getPredictionsAndDisplayOnMap(place);
-      saveSearch(place);
-      exploreDestination(place);
-      generateHistory();
-    };
-    btn.classList.add(
-      "font-semibold",
-      "p-3",
-      "pl-5",
-      "pr-5",
-      "mr-5",
-      "mb-3",
-      "rounded-lg",
-      "shadow-lg"
-    );
-    container.appendChild(btn);
-  });
-};
-
-
-generateHistory();
-
-
-document.getElementById("search-form").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const newSearch = $("#search-input").val();
-
-  if (!newSearch) return;
-
-  saveSearch(newSearch);
-  generateHistory();
-  exploreDestination(newSearch);
-});
-
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function () {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
-  });
-} 
